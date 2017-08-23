@@ -1,0 +1,28 @@
+box: golang
+
+build:
+  steps:
+  # Setup workspace
+  - wercker/setup-go-workspace:
+    package-dir: github.com/dbmedialab/$WERCKER_GIT_REPOSITORY
+  # Build the projects and copy files we want to the output dir.
+  # We build without CGO to be able to run the binary on alpine which uses musl and not libc
+  - script:
+    name: build project
+    code: |
+      echo 'Lets skip this for now'
+      # CGO_ENABLED=0 go build -tags embedded  -a -ldflags '-s' -installsuffix cgo -o "$WERCKER_OUTPUT_DIR/main" cmd/server/main.go
+
+deploy:
+  box:
+    id: eu.gcr.io/dagbladet-projects/kubectl
+    username: _json_key
+    password: $GCR_DBP_JSON_KEY_FILE
+    registry: https://eu.gcr.io
+  steps:
+  # Setup namespace
+  - script:
+    name: build container
+    code: |
+      ls -al
+      buildimage

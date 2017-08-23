@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{env "WERCKER_GIT_REPOSITORY"}}
+  labels:
+    app: {{env "WERCKER_GIT_REPOSITORY"}}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: {{env "WERCKER_GIT_REPOSITORY"}}
+    spec:
+      containers:
+        - name: app
+          image: {{env "IMAGE"}}
+          ports:
+          - containerPort: 8080
+            name: http-port
+          resources:
+            requests:
+              memory: "40Mi"
+              cpu: "0.02"
+            limits:
+              memory: "200Mi"
+              cpu: "0.1"
